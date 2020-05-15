@@ -19,6 +19,7 @@ class MyTextField: UITextField {
 class ViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         inputTextField.resignFirstResponder()
+        emojiButton.isSelected = false
     }
     
     override func viewDidLoad() {
@@ -67,7 +68,7 @@ class ViewController: UIViewController {
     
     private lazy var collectionView: EmojiKeyBoard = {
         let collection = EmojiKeyBoard()
-        collection.frame.size.height = 280+bottomSafeHeight
+        collection.frame.size.height = 300+bottomSafeHeight
         collection.keyBoardDelegate = self
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -98,9 +99,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func changeKeyBoardType(_ sender: UIButton){
-        if !inputTextField.isFirstResponder{
-            inputTextField.becomeFirstResponder()
-        }
+        
         sender.isSelected = !sender.isSelected
         let image = UIImage(named: sender.isSelected ? "home_comment_keyboard" : "home_comment_emoji")
         sender.setImage(image, for: .normal)
@@ -110,6 +109,9 @@ class ViewController: UIViewController {
             inputTextField.inputView = nil
         }
         inputTextField.reloadInputViews()
+        if !inputTextField.isFirstResponder{
+            inputTextField.becomeFirstResponder()
+        }
     }
     
 }
@@ -126,22 +128,24 @@ extension ViewController: KeyBoardOperateDelegate{
         }
         inputTextField.text?.append(key.emojiValue ?? "")
         collectionView.setText(inputTextField.text ?? "")
-//        print("taped key Value: \(key.emojiStringValue ?? "")")
+        collectionView.setEmoji(key)
+        collectionView.saveEmoji()
     }
     
     func didTapRemove() {
-        
         let text = inputTextField.text ?? ""
         let count = text.count
-        
         if count == 0 {
             collectionView.setText("")
             return
         }
+        let removedText = String(text.prefix(count-1))
+        inputTextField.text = removedText
+        collectionView.setText(removedText)
+    }
+    
+    func didTapSend() {
         
-        
-        
-        collectionView.setText(inputTextField.text ?? "")
     }
 }
 

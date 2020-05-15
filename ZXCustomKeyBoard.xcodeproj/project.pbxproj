@@ -15,6 +15,7 @@
 		1822247E246B8DDC00EEA94A /* KeyBoardProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1822247D246B8DDC00EEA94A /* KeyBoardProtocol.swift */; };
 		18222484246B995300EEA94A /* EmojiKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18222483246B995300EEA94A /* EmojiKeyBoard.swift */; };
 		18222486246BA5FD00EEA94A /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18222485246BA5FD00EEA94A /* EmojiCell.swift */; };
+		18408818246CEE1500D7A661 /* EmojiHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18408817246CEE1500D7A661 /* EmojiHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		1822247D246B8DDC00EEA94A /* KeyBoardProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBoardProtocol.swift; sourceTree = "<group>"; };
 		18222483246B995300EEA94A /* EmojiKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiKeyBoard.swift; sourceTree = "<group>"; };
 		18222485246BA5FD00EEA94A /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
+		18408817246CEE1500D7A661 /* EmojiHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				1822247D246B8DDC00EEA94A /* KeyBoardProtocol.swift */,
 				18222483246B995300EEA94A /* EmojiKeyBoard.swift */,
 				18222485246BA5FD00EEA94A /* EmojiCell.swift */,
+				18408817246CEE1500D7A661 /* EmojiHeader.swift */,
 			);
 			path = ZXCustomKeyBoard;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 				1822247E246B8DDC00EEA94A /* KeyBoardProtocol.swift in Sources */,
 				1822246C246B8D0800EEA94A /* ViewController.swift in Sources */,
 				18222486246BA5FD00EEA94A /* EmojiCell.swift in Sources */,
+				18408818246CEE1500D7A661 /* EmojiHeader.swift in Sources */,
 				18222468246B8D0800EEA94A /* AppDelegate.swift in Sources */,
 				18222484246B995300EEA94A /* EmojiKeyBoard.swift in Sources */,
 			);

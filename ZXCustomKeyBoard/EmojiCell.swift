@@ -8,8 +8,21 @@
 
 import UIKit
 
+extension EmojiCollection: EmojiProtocol{
+    
+    func getVisibleCells(closure: (([UICollectionViewCell]) -> Void)?){
+        self.closure = closure
+    }
+    func setCoverViewFrame(_ frame: CGRect,originView: UIView) {
+        _convertViewFrame = frame
+        _originView = originView
+    }
+}
+
 class EmojiCollection: UITableViewCell {
-    private lazy var collectionView: UICollectionView = {
+    fileprivate var _originView = UIView()
+    fileprivate var _convertViewFrame = CGRect.zero
+    fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 18
         layout.minimumInteritemSpacing = 10
@@ -41,12 +54,20 @@ class EmojiCollection: UITableViewCell {
     
     //MARK:- FUNC
     /*public*/
+    @objc func reloadData(){
+        collectionView.reloadData()
+    }
     @objc public weak var keyBoardDelegate: KeyBoardOperateDelegate?
     public func setKeys(_ keys: [String]){
         _keys = keys
-        let height = ceil(CGFloat(keys.count)/7)*52+15+40
-        heightConstraint.constant = height
         collectionView.reloadData()
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.heightConstraint.constant = weakSelf.collectionView.contentSize.height
+            weakSelf.heightClosure?(weakSelf.heightConstraint.constant)
+            weakSelf.heightClosure = nil
+        }
     }
     
     /*private*/
@@ -87,14 +108,64 @@ class EmojiCollection: UITableViewCell {
                                               constant: 0)
         heightConstraint.isActive = true
         
+        
+        contentView.addSubview(titleLabel)
+        
+        NSLayoutConstraint(item: titleLabel,
+                           attribute: .left,
+                           relatedBy: .equal,
+                           toItem: self,
+                           attribute: .left,
+                           multiplier: 1,
+                           constant: 20).isActive = true
+        
+        NSLayoutConstraint(item: titleLabel,
+                           attribute: .right,
+                           relatedBy: .equal,
+                           toItem: self,
+                           attribute: .right,
+                           multiplier: 1,
+                           constant: -20).isActive = true
+        
+        NSLayoutConstraint(item: titleLabel,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: self,
+                           attribute: .top,
+                           multiplier: 1,
+                           constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: titleLabel,
+                           attribute: .height,
+                           relatedBy: .equal,
+                           toItem: nil,
+                           attribute: .notAnAttribute,
+                           multiplier: 1,
+                           constant: 45).isActive = true
+        
     }
+    
+    //MARK:- SETTER&GETTER
+    
+    public var heightClosure: ((CGFloat) -> Void)?
     private var heightConstraint = NSLayoutConstraint()
     private var _keys = [String]()
+    private var closure: (([UICollectionViewCell]) -> Void)?
+    private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "所有表情"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 15)
+        return label
+    }()
+    
 }
+
 
 extension EmojiCollection: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 15, left: 20, bottom: 40, right: 20)
+        return UIEdgeInsets(top: 45, left: 20, bottom: 50, right: 20)
     }
 }
 
@@ -105,7 +176,25 @@ extension EmojiCollection: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? EmojiItem else { return }
         cell.label.text = _keys[indexPath.row].emojiValue
+        closure?(collectionView.visibleCells)
+        
+//        print("cell frame:\(frame)")
+//        cell.isHidden = _convertViewFrame.contains(frame)
     }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+}
+
+extension EmptyCollection{
+//    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let cells = collectionView.visibleCells
+//        cells.forEach({
+//            var frame = $0.convert($0.frame, to: _originView)
+//            frame.origin = CGPoint(x: frame.origin.x/2, y: frame.origin.y/2)
+//            $0.isHidden = _convertViewFrame.contains(frame)
+//        })
+//    }
 }
 
 extension EmojiCollection: UICollectionViewDataSource{
@@ -140,7 +229,7 @@ class EmojiItem: UICollectionViewCell {
     //MARK:- Getter Setter
     /*public*/
     /*private*/
-    fileprivate var label: UILabel = {
+    var label: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = .boldSystemFont(ofSize: 30)

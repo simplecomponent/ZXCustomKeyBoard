@@ -6,10 +6,16 @@
 //  Copyright © 2020 apple. All rights reserved.
 //
 import Foundation
+import UIKit
 
 @objc public protocol KeyBoardProtocol {
     var keyBoardType: ZXKeyBoardType { get }
     var keys: [String] { get }
+}
+
+@objc public protocol EmojiProtocol{
+    func setCoverViewFrame(_ frame: CGRect,originView: UIView)
+    func getVisibleCells(closure: (([UICollectionViewCell]) -> Void)?)
 }
 
 @objc public enum ZXKeyBoardType: Int {
